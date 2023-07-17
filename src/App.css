@@ -3,6 +3,22 @@
   display: flex;
 }
 
-.App > div {
+.App>div {
   margin-right: 50px;
+}
+
+.error {
+  border: 3px solid red;
+}
+
+.errorMessage {
+  color: red;
+}
+
+.done {
+  opacity: .5;
+}
+
+.activeButton {
+  background-color: cadetblue;
 }
