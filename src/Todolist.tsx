@@ -1,13 +1,14 @@
 import React from 'react'
-import { tasksType } from './App'
+import { filterType, tasksType } from './App'
 
 type todolistType = {
     title: string
     tasks: tasksType[]
     remooveTask:(id:number)=>void
+    filterTasks:(value:filterType)=>void
 }
 
-export const Todolist: React.FC<todolistType> = ({ title, tasks,remooveTask }) => {
+export const Todolist: React.FC<todolistType> = ({ title, tasks,remooveTask,filterTasks }) => {
     return (
         <div>
             <h3>{title}</h3>
@@ -26,9 +27,9 @@ export const Todolist: React.FC<todolistType> = ({ title, tasks,remooveTask }) =
                 })}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={()=>{filterTasks('all')}}>All</button>
+                <button onClick={()=>{filterTasks('active')}}>Active</button>
+                <button onClick={()=>{filterTasks('completed')}}>Completed</button>
             </div>
         </div>
     )
