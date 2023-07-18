@@ -2,21 +2,23 @@ import React, { ChangeEvent, useState, KeyboardEvent } from 'react'
 import { filterType, tasksType } from './App'
 
 type todolistType = {
+    id:string
     title: string
     tasks: tasksType[]
-    remooveTask: (id: string) => void
-    filterTasks: (value: filterType) => void
-    addTask: (title: string) => void
-    changeTaskStatus: (id: string, isDone: boolean) => void
+    remooveTask: (id: string,todolistId:string) => void
+    filterTasks: (value: filterType,id:string) => void
+    addTask: (title: string,todolistId:string) => void
+    changeTaskStatus: (id: string, isDone: boolean,todolistId:string) => void
     filter: filterType
+    remooveTodolist:(todolistId:string)=>void
 }
 
-export const Todolist: React.FC<todolistType> = ({ title, tasks, remooveTask, filterTasks, addTask, changeTaskStatus, filter }) => {
+export const Todolist: React.FC<todolistType> = ({ title, tasks, remooveTask, filterTasks, addTask, changeTaskStatus, filter,id,remooveTodolist }) => {
     let [newTitle, setNewTitle] = useState('')
     let [error, setError] = useState<null | string>(null)
     let addTaskHandler = () => {
         if (newTitle.trim() !== '') {
-            addTask(newTitle.trim())
+            addTask(newTitle.trim(),id)
             setNewTitle('')
         } else {
             setError('title is required !')
@@ -31,12 +33,12 @@ export const Todolist: React.FC<todolistType> = ({ title, tasks, remooveTask, fi
             addTaskHandler()
         }
     }
-    let onClickAllHandler = () => { filterTasks('all') }
-    let onClickActiveHandler = () => { filterTasks('active') }
-    let onClickCompletedHandler = () => { filterTasks('completed') }
+    let onClickAllHandler = () => { filterTasks('all',id) }
+    let onClickActiveHandler = () => { filterTasks('active',id) }
+    let onClickCompletedHandler = () => { filterTasks('completed',id) }
     return (
         <div>
-            <h3>{title}</h3>
+            <h3><button onClick={()=>{remooveTodolist(id)}}>x</button> {title}</h3>
             <div>
                 <input value={newTitle} onChange={onChandeHandelr}
                     onKeyDown={onKeyDownHandler}
@@ -47,13 +49,13 @@ export const Todolist: React.FC<todolistType> = ({ title, tasks, remooveTask, fi
             </div>
             <ul>
                 {tasks.map((t: tasksType) => {
-                    const onClickHandler = () => { remooveTask(t.id) }
+                    const onClickHandler = () => { remooveTask(t.id,id) }
                     return (
                         <li key={t.id} className={t.isDone === true ? 'done' : ''}>
                             <button onClick={onClickHandler}>x</button>
                             <input type="checkbox" checked={t.isDone} onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                 let newTaskSatus = e.currentTarget.checked
-                                changeTaskStatus(t.id, newTaskSatus)
+                                changeTaskStatus(t.id, newTaskSatus,id)
                             }} />
                             <span>{t.title}</span>
                         </li>)
