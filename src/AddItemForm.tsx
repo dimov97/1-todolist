@@ -1,3 +1,5 @@
+import { AddCircle } from '@mui/icons-material'
+import { Button } from '@mui/material'
 import React, { ChangeEvent, useState, KeyboardEvent } from 'react'
 
 type addItemFormType = {
@@ -30,8 +32,7 @@ export const AddItemForm: React.FC<addItemFormType> = ({addItem}) => {
             <input value={newTitle} onChange={onChandeHandelr}
                 onKeyDown={onKeyDownHandler}
                 className={error ? 'error' : ''}
-            />
-            <button onClick={addTaskHandler}>+</button>
+            /> <Button variant="outlined" onClick={addTaskHandler}><AddCircle/></Button>
             {error && <div className='errorMessage'>{error}</div>}
         </div>
     )
