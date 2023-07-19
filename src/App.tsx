@@ -3,6 +3,8 @@ import './App.css';
 import { Todolist } from './Todolist';
 import { v1 } from 'uuid';
 import { AddItemForm } from './AddItemForm';
+import { AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography } from '@mui/material';
+import { Menu } from '@mui/icons-material';
 
 export type tasksType = {
     id: string
@@ -95,17 +97,39 @@ function App() {
         setTodoslists([newTodo, ...todolists])
         setTasks({ ...tasks, [newTodolistId]: [] })
     }
-    function changeTodolistTitle(id:string,title:string) {
-        let newTodolistTitle = todolists.find(tl=>tl.id===id)
-        if(newTodolistTitle) {
-            newTodolistTitle.title=title
+    function changeTodolistTitle(id: string, title: string) {
+        let newTodolistTitle = todolists.find(tl => tl.id === id)
+        if (newTodolistTitle) {
+            newTodolistTitle.title = title
             setTodoslists([...todolists])
         }
     }
 
     return (
         <div className="App">
+            <AppBar position="static" >
+                <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                    >
+                        <Menu />
+                    </IconButton>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        Todolist
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
+            <Container fixed>
+                <Grid container style={{padding:'20px'}}>
             <AddItemForm addItem={addTodolist} />
+            </Grid>
+            <Grid container spacing={6}>
+            
             {todolists.map(tl => {
                 let filteredTask = tasks[tl.id]
 
@@ -116,6 +140,8 @@ function App() {
                     filteredTask = filteredTask.filter(t => t.isDone === false)
                 }
                 return (
+                    <Grid item style={{marginTop:'15px'}}>
+                        <Paper style={{padding:'10px'}}>
                     <Todolist title={tl.title}
                         id={tl.id}
                         key={tl.id}
@@ -129,8 +155,12 @@ function App() {
                         changeTaskTitle={changeTaskTitle}
                         changeTodolistTitle={changeTodolistTitle}
                     />
+                    </Paper>
+                    </Grid>
                 )
             })}
+            </Grid>
+            </Container>
         </div>
     );
 }
