@@ -13,7 +13,7 @@ export type tasksType = {
 }
 export type filterType = 'all' | 'completed' | 'active'
 
-type todolistsType = {
+export type todolistsType = {
     id: string,
     title: string,
     filter: filterType
@@ -123,7 +123,7 @@ function App() {
                     </Typography>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
-            </AppBar>
+            </AppBar> 
             <Container fixed>
                 <Grid container style={{padding:'20px'}}>
             <AddItemForm addItem={addTodolist} />
