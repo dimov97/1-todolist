@@ -20,7 +20,9 @@ export const AddItemForm: React.FC<addItemFormType> = ({ addItem }) => {
     }
     let onChandeHandelr = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)
-        setError(null)
+        if(error!==null) {
+            setError(null)
+        }
     }
     let onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
