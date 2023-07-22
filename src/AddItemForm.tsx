@@ -7,7 +7,7 @@ type addItemFormType = {
 
 }
 
-export const AddItemForm: React.FC<addItemFormType> = ({ addItem }) => {
+export const AddItemForm: React.FC<addItemFormType> = React.memo( ({ addItem }) => {
     let [newTitle, setNewTitle] = useState('')
     let [error, setError] = useState<null | string>(null)
     let addTaskHandler = () => {
@@ -39,4 +39,4 @@ export const AddItemForm: React.FC<addItemFormType> = ({ addItem }) => {
             /> <Button variant="outlined" onClick={addTaskHandler}><AddCircle /></Button>
         </div>
     )
-}
+})

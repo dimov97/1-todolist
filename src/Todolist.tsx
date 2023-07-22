@@ -1,9 +1,10 @@
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, useCallback } from 'react'
 import { filterType, tasksType } from './App'
 import { AddItemForm } from './AddItemForm'
 import { EditableSpan } from './EditableSpan'
 import { Button, Checkbox } from '@mui/material'
-import { CheckBox, Delete, RemoveCircle } from '@mui/icons-material'
+import { Delete, RemoveCircle } from '@mui/icons-material'
+import { Task } from './Task'
 
 type todolistType = {
     id: string
@@ -20,18 +21,27 @@ type todolistType = {
     changeTodolistTitle: (todolistId: string, title:string) => void
 }
 
-export const Todolist: React.FC<todolistType> = ({ title, tasks, remooveTask, filterTasks, addTask, changeTaskStatus, filter, id, remooveTodolist, changeTaskTitle,changeTodolistTitle }) => {
+export const Todolist: React.FC<todolistType> = React.memo( ({ title, tasks, remooveTask, filterTasks, addTask, changeTaskStatus, filter, id, remooveTodolist, changeTaskTitle,changeTodolistTitle }) => {
 
-    let onClickAllHandler = () => { filterTasks('all', id) }
-    let onClickActiveHandler = () => { filterTasks('active', id) }
-    let onClickCompletedHandler = () => { filterTasks('completed', id) }
+    let onClickAllHandler = useCallback( () => { filterTasks('all', id) },[filterTasks,id])
+    let onClickActiveHandler = useCallback( () => { filterTasks('active', id) },[filterTasks,id])
+    let onClickCompletedHandler = useCallback( () => { filterTasks('completed', id) },[filterTasks,id])
 
-    const addNewTask = (title: string) => {
+    const addNewTask = useCallback(  (title: string) => {
         addTask(title, id)
-    }
+    },[addTask,id])
     const remooveTodolistHandler =() => { remooveTodolist(id) }
-    const changeTodolistTitleHandler = (title:string) => {
+    const changeTodolistTitleHandler = useCallback( (title:string) => {
         changeTodolistTitle(id, title)
+    },[changeTaskTitle,id])
+
+    let filteredTask = tasks
+
+    if (filter === 'completed') {
+        filteredTask = filteredTask.filter(t => t.isDone === true)
+    }
+    if (filter === 'active') {
+        filteredTask = filteredTask.filter(t => t.isDone === false)
     }
 
     return (
@@ -39,22 +49,15 @@ export const Todolist: React.FC<todolistType> = ({ title, tasks, remooveTask, fi
             <h3><Button onClick={remooveTodolistHandler}><Delete/></Button> <EditableSpan title={title} onChange={changeTodolistTitleHandler}/></h3>
             <AddItemForm addItem={addNewTask} />
             <div>
-                {tasks.map((t: tasksType) => {
-                    const onClickHandler = () => { remooveTask(t.id, id) }
-                    let onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                        let newTaskSatus = e.currentTarget.checked
-                        changeTaskStatus(t.id, newTaskSatus, id)
-                    }
-                    let onChangeTaskTitleHandler = (title: string) => {
-                        changeTaskTitle(t.id, title, id)
-                    }
-                    return (
-                        <div key={t.id} className={t.isDone === true ? 'done' : ''}>
-                            <Button variant="outlined" onClick={onClickHandler}><RemoveCircle/></Button>
-                            <Checkbox checked={t.isDone} onChange={onChangeTaskStatusHandler} />
-                            <EditableSpan title={t.title} onChange={onChangeTaskTitleHandler} />
-                        </div>)
-                })}
+                {filteredTask.map(t=><Task 
+                changeTaskStatus={changeTaskStatus}
+                changeTaskTitle={changeTaskTitle}
+                remooveTask={remooveTask}
+                t = {t}
+                id={id}
+                key={t.id}
+
+                />)}
             </div>
             <div>
                 <Button color='primary' variant={filter === 'all' ? 'contained' : 'outlined'} onClick={onClickAllHandler}>All</Button>
@@ -63,4 +66,4 @@ export const Todolist: React.FC<todolistType> = ({ title, tasks, remooveTask, fi
             </div>
         </div>
     )
-}
+})

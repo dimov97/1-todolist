@@ -7,7 +7,7 @@ type editableSpanType = {
 
 }
 
-export const EditableSpan: React.FC<editableSpanType> = ({ title, onChange }) => {
+export const EditableSpan: React.FC<editableSpanType> = React.memo( ({ title, onChange }) => {
     let [newTitle, setNewTitle] = useState(title)
     let [editMode, setEditMode] = useState(false)
 
@@ -30,4 +30,4 @@ export const EditableSpan: React.FC<editableSpanType> = ({ title, onChange }) =>
             ? <TextField size="small" label="new title" variant="outlined" value={newTitle} onKeyDown={onKeyDownHandler} onBlur={editModeOFF} autoFocus onChange={onChangeHandler} />
             : <span onDoubleClick={editModeON}>{title}</span>
     )
-}
+})
